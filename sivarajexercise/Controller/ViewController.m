@@ -16,7 +16,7 @@
 @synthesize first;
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor blackColor];
     self.title =@"";
     service = [[WebServices alloc]init];
     service.webservicedelegate = self;
