@@ -16,11 +16,11 @@
 @synthesize first;
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor lightGrayColor];
+    self.view.backgroundColor = [UIColor clearColor];
     self.title =@"";
     service = [[WebServices alloc]init];
     service.webservicedelegate = self;
-    [self WebCallInitiated];
+    [self WebCallInitiated:@"InitialCall"];
     }
 
 -(void)addConstranits{
@@ -34,6 +34,15 @@
     [self.view addConstraint:width];
     [self.view addConstraint:height];
     
+   NSLayoutConstraint * x1 = [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeLeadingMargin relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeLeadingMargin multiplier:1.0 constant:0];
+    NSLayoutConstraint * y1 = [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeTopMargin relatedBy:NSLayoutRelationEqual toItem:first.tableCollection attribute:NSLayoutAttributeBottomMargin  multiplier:1.0 constant:10];
+    NSLayoutConstraint * width1= [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0];
+    NSLayoutConstraint * height1 = [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeHeight multiplier:0.05 constant:0];
+    [first addConstraint:x1];
+    [first addConstraint:y1];
+    [first addConstraint:width1];
+    [first addConstraint:height1];
+    
     NSLayoutConstraint * x2 = [NSLayoutConstraint constraintWithItem:first.tableCollection attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0];
     NSLayoutConstraint * y2 = [NSLayoutConstraint constraintWithItem:first.tableCollection attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
     NSLayoutConstraint * width2 = [NSLayoutConstraint constraintWithItem:first.tableCollection attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0];
@@ -43,14 +52,6 @@
     [first addConstraint:width2];
     [first addConstraint:height2];
     
-    NSLayoutConstraint * x1 = [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0];
-    NSLayoutConstraint * y1 = [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeBottomMargin relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeBottomMargin multiplier:1.0 constant:0];
-    NSLayoutConstraint * width1= [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0];
-    NSLayoutConstraint * height1 = [NSLayoutConstraint constraintWithItem:first.refressButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:first attribute:NSLayoutAttributeBottom multiplier:0.05 constant:0];
-    [first addConstraint:x1];
-    [first addConstraint:y1];
-    [first addConstraint:width1];
-    [first addConstraint:height1];
 }
 
 
@@ -66,13 +67,12 @@
     parse =[[ParserMethods alloc]init];
     collectedDatas = [[NSMutableArray alloc]init];
     collectedDatas = [parse parserobj:dic];
-    NSLog(@"%@",dic);
-    [spinner stopAnimating];
     first = [[FirstView alloc]init];
     first.translatesAutoresizingMaskIntoConstraints = NO;
     first.tableCollection.delegate = self;
     first.tableCollection.dataSource = self;
-    [first.refressButton addTarget:self action:@selector(WebCallInitiated) forControlEvents:UIControlEventTouchDown];
+    [first.refressButton addTarget:self action:@selector(WebCallInitiated:) forControlEvents:UIControlEventTouchDown];
+    [spinner stopAnimating];
     [self.view addSubview:first];
     [self addConstranits];
 }
@@ -110,8 +110,9 @@
 }
 
 
--(void)WebCallInitiated
+-(void)WebCallInitiated:(NSString *)action
 {
+    NSLog(@"%@",action);
   [service webservicerequest:@"https://dl.dropboxusercontent.com/s/2iodh4vg0eortkl/facts.json"];
     spinner = [[UIActivityIndicatorView alloc]
                                         initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];

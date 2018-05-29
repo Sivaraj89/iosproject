@@ -258,6 +258,15 @@
 			path = FLAnimatedImage;
 			sourceTree = "<group>";
 		};
+		43C3BEA820BD395E0066BB6B /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				4389CC3820B7E81A00775D48 /* images.png */,
+				4389CBDB20B7E66B00775D48 /* SDWebImage */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
 		43C55BD820B67BB4007FDE48 = {
 			isa = PBXGroup;
 			children = (
@@ -281,11 +290,10 @@
 		43C55BE320B67BB4007FDE48 /* sivarajexercise */ = {
 			isa = PBXGroup;
 			children = (
-				4389CC3820B7E81A00775D48 /* images.png */,
-				4389CBDB20B7E66B00775D48 /* SDWebImage */,
-				43C55C1820B682D3007FDE48 /* Controller */,
-				43C55C1720B682BC007FDE48 /* View */,
+				43C3BEA820BD395E0066BB6B /* Others */,
 				43C55C1620B682A2007FDE48 /* Model */,
+				43C55C1720B682BC007FDE48 /* View */,
+				43C55C1820B682D3007FDE48 /* Controller */,
 				43C55BEA20B67BB4007FDE48 /* Main.storyboard */,
 				43C55BED20B67BB4007FDE48 /* Assets.xcassets */,
 				43C55BEF20B67BB4007FDE48 /* LaunchScreen.storyboard */,

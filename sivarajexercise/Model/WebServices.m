@@ -10,32 +10,37 @@
 
 @implementation WebServices
 
--(void)webservicerequest:(NSString *)req_Url
-{
+-(void)webservicerequest:(NSString *)req_Url{
     NSURL *url = [NSURL URLWithString:req_Url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.HTTPMethod = @"GET";
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request
-                                                                 completionHandler:^(NSData *data,
-                                                                                     NSURLResponse *response,
-                                                                                     NSError *error)
-                                  {
-                                      if (!error)
-                                      {
-                                          NSError *e = nil;
-                                          NSString *iso = [[NSString alloc] initWithData:data encoding:NSISOLatin1StringEncoding];
-                                          NSData *dutf8 = [iso dataUsingEncoding:NSUTF8StringEncoding];
-                                          NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:dutf8 options:NSJSONReadingMutableContainers error:&e];
-                                          [self.webservicedelegate receiveddatadict:dict];
-
-                                      }
-                                      else
-                                      {
-                                          NSLog(@"Error: %@", error.localizedDescription);
-                                      }
-                                  }];
-        [task resume];
-
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 }
+
+#pragma mark - NSURLConnection Delegate Methods
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    NSLog(@"Did Receive Response %@", response);
+    responseData = [[NSMutableData alloc]init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    [responseData appendData:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    NSLog(@"Connection failed: %@", [error description]);
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    NSError *e = nil;
+    NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSISOLatin1StringEncoding];
+    NSData *dutf8 = [responseString dataUsingEncoding:NSUTF8StringEncoding];
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:dutf8 options:NSJSONReadingMutableContainers error:&e];
+    [self.webservicedelegate receiveddatadict:dict];
+    responseData = nil;
+}
+
+
+
 
 @end
